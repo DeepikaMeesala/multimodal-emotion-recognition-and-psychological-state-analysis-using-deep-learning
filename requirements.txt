@@ -1,6 +1,6 @@
 streamlit
 opencv-python-headless
 numpy
-keras
-tensorflow-cpu==2.15.0
+keras==2.15.0
 Pillow
+h5py
