@@ -1,30 +1,31 @@
 import streamlit as st
 import cv2
 import numpy as np
-#from keras.models import load_model
+from keras.models import load_model
+from PIL import Image
 
 st.title("Emotion Recognition App")
 
+# load model
 model = load_model("emotion_model.h5")
 
 emotion_labels = [
-"Angry","Disgust","Fear","Happy","Sad","Surprise","Neutral"
+    "Angry","Disgust","Fear","Happy","Sad","Surprise","Neutral"
 ]
 
+# load face detector
 face_cascade = cv2.CascadeClassifier(
-cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
 )
 
-run = st.checkbox("Start Camera")
+uploaded_file = st.file_uploader("Upload an image", type=["jpg","png","jpeg"])
 
-FRAME_WINDOW = st.image([])
+if uploaded_file is not None:
 
-camera = cv2.VideoCapture(0)
+    image = Image.open(uploaded_file)
+    image = np.array(image)
 
-while run:
-    ret, frame = camera.read()
-
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     faces = face_cascade.detectMultiScale(gray,1.3,5)
 
@@ -38,12 +39,9 @@ while run:
         prediction = model.predict(face)
         emotion = emotion_labels[np.argmax(prediction)]
 
-        cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-        cv2.putText(frame,emotion,(x,y-10),
+        cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,0),2)
+        cv2.putText(image,emotion,(x,y-10),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.9,(0,255,0),2)
 
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-    FRAME_WINDOW.image(frame)
-
+    st.image(image, caption="Emotion Detection Result")
