@@ -1,7 +1,7 @@
 import streamlit as st
 import cv2
 import numpy as np
-from tensorflow.keras.models import load_model
+from keras.models import load_model
 from PIL import Image
 
 st.title("Emotion Recognition App")
@@ -45,4 +45,5 @@ if uploaded_file is not None:
                     0.9,(0,255,0),2)
 
     st.image(image, caption="Emotion Detection Result")
+
 
