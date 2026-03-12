@@ -1,7 +1,7 @@
 import streamlit as st
 import cv2
 import numpy as np
-from tensorflow.keras.models import load_model
+from keras.models import load_model
 
 st.title("Emotion Recognition App")
 
@@ -44,4 +44,5 @@ while run:
                     0.9,(0,255,0),2)
 
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
     FRAME_WINDOW.image(frame)
